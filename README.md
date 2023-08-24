@@ -1,7 +1,6 @@
-- 👋 Hi, I’m @NourHatem
+- 👋 Hi, I’m @NourHatem119
 - 👀 I’m interested in Java
-- 🌱 I’m currently learning Visual basic
-- I want to work at microsoft
+- 🌱 I’m currently learning JavaScript
 - 📫 How to reach me mamoexico@gmail.com
 
 <!---
