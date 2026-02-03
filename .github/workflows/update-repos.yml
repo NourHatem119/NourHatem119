@@ -1,0 +1,76 @@
+name: Update Repository List
+
+on:
+  schedule:
+    # Runs every day at midnight
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allows you to run this manually from the Actions tab
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Generate Repo List and Update README
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const username = 'NourHatem119'; // Your Username
+            const theme = 'tokyonight'; // Your preferred theme
+            
+            // 1. Fetch user repositories (sorted by updated date)
+            const repos = await github.paginate(github.rest.repos.listForUser, {
+              username: username,
+              sort: 'updated',
+              direction: 'desc',
+              per_page: 100,
+              type: 'public'
+            });
+
+            // 2. Filter out forks if you want (optional) and select top X repos
+            // Currently selecting top 20 non-archived repos
+            const activeRepos = repos
+              .filter(r => !r.archived) 
+              .slice(0, 20); 
+
+            // 3. Build the HTML string
+            let htmlContent = '';
+            
+            for (const repo of activeRepos) {
+              htmlContent += `
+              <a href="${repo.html_url}">
+                <img src="https://github-readme-stats-custom-two.vercel.app/api/pin/?username=${username}&repo=${repo.name}&theme=${theme}" alt="${repo.name}" />
+              </a>\n`;
+            }
+
+            // 4. Read the current README
+            const fs = require('fs');
+            const readmePath = 'README.md';
+            let readme = fs.readFileSync(readmePath, 'utf8');
+
+            // 5. Replace content between markers
+            const startMarker = '';
+            const endMarker = '';
+            
+            const regex = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`);
+            const newContent = `${startMarker}\n${htmlContent}\n${endMarker}`;
+            
+            if (readme.replace(regex, newContent) !== readme) {
+                fs.writeFileSync(readmePath, readme.replace(regex, newContent));
+                console.log("README updated successfully.");
+            } else {
+                console.log("No changes detected.");
+            }
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          # Only commit if there are changes
+          git diff --staged --quiet || git commit -m "Auto-update repository list"
+          git push
