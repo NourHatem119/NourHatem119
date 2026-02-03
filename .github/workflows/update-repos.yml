@@ -53,11 +53,11 @@ jobs:
             let readme = fs.readFileSync(readmePath, 'utf8');
 
             // 5. Replace content between markers
-            const startMarker = '';
-            const endMarker = '';
+            const startMarker = '<div>';
+            const endMarker = '</div>';
             
             const regex = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`);
-            const newContent = `${startMarker}\n${htmlContent}\n${endMarker}`;
+            const newContent = `${startMarker}\n<p align="center">\n${htmlContent}\n</p>\n${endMarker}`;
             
             if (readme.replace(regex, newContent) !== readme) {
                 fs.writeFileSync(readmePath, readme.replace(regex, newContent));
