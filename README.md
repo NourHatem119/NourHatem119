@@ -153,6 +153,10 @@
 <div>
 <p align="center">
 
+  <a href="https://github.com/NourHatem119/Gymnasium">
+    <img src="https://github-readme-stats-custom-two.vercel.app/api/pin/?username=NourHatem119&repo=Gymnasium&theme=tokyonight" alt="Gymnasium" />
+  </a>
+
   <a href="https://github.com/NourHatem119/NourHatem119">
     <img src="https://github-readme-stats-custom-two.vercel.app/api/pin/?username=NourHatem119&repo=NourHatem119&theme=tokyonight" alt="NourHatem119" />
   </a>
